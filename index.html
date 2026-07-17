@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Demo — Panel del festejado | Invitaciones Digitales MX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root {
+  --cream: #f6f1e7;
+  --cream-dark: #e9dfc9;
+  --ink: #2e2a26;
+  --ink-soft: #6b6258;
+  --gold: #b6924f;
+  --gold-dark: #8f7038;
+  --wine: #4a1f24;
+  --wine-soft: #6d2f37;
+  --green: #2f6b4f;
+  --white: #fffdf9;
+  --shadow: 0 20px 50px rgba(46, 30, 22, 0.16);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: 'EB Garamond', Georgia, serif;
+  background: var(--cream);
+  color: var(--ink);
+}
+h1, h2, h3 { font-family: 'Playfair Display', 'Cormorant Garamond', serif; margin: 0; font-weight: 600; }
+p { line-height: 1.6; color: var(--ink-soft); margin: 0; }
+button { font-family: inherit; cursor: pointer; }
+input, select { font-family: inherit; }
+
+/* ---- Banner de contexto ---- */
+.demo-banner {
+  background: var(--wine);
+  color: var(--cream);
+  text-align: center;
+  padding: 10px 20px;
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+}
+.demo-banner strong { color: var(--gold); }
+
+/* ---- Tabs ---- */
+.tabs-wrap { max-width: 1120px; margin: 0 auto; padding: 30px 24px 0; }
+.tabs { display: flex; gap: 10px; flex-wrap: wrap; border-bottom: 1px solid var(--cream-dark); padding-bottom: 0; }
+.tab-btn {
+  background: transparent;
+  border: none;
+  padding: 14px 4px;
+  margin-right: 22px;
+  font-size: 1.02rem;
+  color: var(--ink-soft);
+  border-bottom: 3px solid transparent;
+  display: flex; align-items: center; gap: 8px;
+}
+.tab-btn .num {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--cream-dark); color: var(--wine);
+  font-size: 0.78rem; display: flex; align-items: center; justify-content: center;
+  font-family: 'EB Garamond', serif;
+}
+.tab-btn.active { color: var(--wine); border-bottom-color: var(--gold); font-weight: 600; }
+.tab-btn.active .num { background: var(--wine); color: var(--cream); }
+
+.view { max-width: 1120px; margin: 0 auto; padding: 40px 24px 90px; display: none; }
+.view.active { display: block; }
+
+.view-head { margin-bottom: 30px; }
+.eyebrow {
+  font-family: 'EB Garamond', serif; font-style: italic;
+  letter-spacing: 0.24em; text-transform: uppercase;
+  font-size: 0.76rem; color: var(--gold-dark); margin-bottom: 8px; display: block;
+}
+.view-head h2 { font-size: 1.9rem; color: var(--wine); margin-bottom: 8px; }
+
+/* ---- Panel del festejado ---- */
+.stats-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 34px; }
+.stat-card {
+  background: var(--white); border: 1px solid var(--cream-dark); border-radius: 14px;
+  padding: 18px 24px; min-width: 140px; box-shadow: 0 6px 18px rgba(46,30,22,0.05);
+}
+.stat-card strong { display: block; font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--wine); }
+.stat-card span { font-size: 0.8rem; color: var(--ink-soft); letter-spacing: 0.03em; }
+
+.panel-grid { display: grid; grid-template-columns: 300px 1fr; gap: 30px; align-items: start; }
+@media (max-width: 800px) { .panel-grid { grid-template-columns: 1fr; } }
+
+.add-guest-card {
+  background: var(--white); border: 1px solid var(--cream-dark); border-radius: 18px;
+  padding: 26px; box-shadow: 0 10px 26px rgba(46,30,22,0.06); position: sticky; top: 20px;
+}
+.add-guest-card h3 { font-size: 1.15rem; color: var(--wine); margin-bottom: 4px; }
+.add-guest-card > p { font-size: 0.85rem; margin-bottom: 18px; }
+.field { margin-bottom: 16px; }
+.field label { display: block; font-size: 0.8rem; color: var(--ink-soft); margin-bottom: 6px; letter-spacing: 0.02em; }
+.field input, .field select {
+  width: 100%; padding: 11px 13px; border-radius: 9px; border: 1px solid var(--cream-dark);
+  background: var(--cream); font-size: 0.98rem; color: var(--ink);
+}
+.field input:focus, .field select:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 12px 20px; border-radius: 999px; border: none; font-size: 0.94rem; text-decoration: none; }
+.btn-wine { background: var(--wine); color: var(--white); width: 100%; }
+.btn-wine:hover { background: var(--wine-soft); }
+.btn-outline { background: transparent; border: 1.3px solid var(--gold); color: var(--gold-dark); }
+.btn-outline:hover { background: var(--gold); color: var(--white); }
+.btn-sm { padding: 8px 14px; font-size: 0.82rem; border-radius: 999px; }
+
+.guest-list { display: flex; flex-direction: column; gap: 12px; }
+.guest-card {
+  background: var(--white); border: 1px solid var(--cream-dark); border-radius: 14px;
+  padding: 16px 18px; display: grid; grid-template-columns: 60px 1fr auto; gap: 16px; align-items: center;
+}
+.guest-qr-mini { width: 60px; height: 60px; background: var(--white); border-radius: 8px; overflow: hidden; border: 1px solid var(--cream-dark); }
+.guest-qr-mini img, .guest-qr-mini canvas { width: 100%; height: 100%; display: block; }
+.guest-info h4 { font-size: 1.05rem; color: var(--ink); margin-bottom: 3px; }
+.guest-meta { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 0.78rem; color: var(--ink-soft); }
+.badge { padding: 3px 10px; border-radius: 999px; font-size: 0.72rem; letter-spacing: 0.03em; }
+.badge-confirmed { background: rgba(47,107,79,0.12); color: var(--green); }
+.badge-pending { background: rgba(182,146,79,0.14); color: var(--gold-dark); }
+.link-row { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
+.link-row input { flex: 1; font-size: 0.76rem; padding: 6px 8px; border-radius: 6px; border: 1px solid var(--cream-dark); background: var(--cream); color: var(--ink-soft); }
+.guest-actions { display: flex; flex-direction: column; gap: 8px; }
+.copied-tag { font-size: 0.72rem; color: var(--green); margin-left: 4px; opacity: 0; transition: opacity 0.2s; }
+.copied-tag.show { opacity: 1; }
+
+/* ---- Vista del invitado (telefono) ---- */
+.guest-view-layout { display: grid; grid-template-columns: 320px 1fr; gap: 44px; align-items: start; }
+@media (max-width: 800px) { .guest-view-layout { grid-template-columns: 1fr; } }
+.phone-stage { display: flex; justify-content: center; }
+.phone {
+  width: 300px; height: 610px; border-radius: 38px; background: #16110f; padding: 12px;
+  box-shadow: var(--shadow); position: relative;
+}
+.phone::before {
+  content: ''; position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+  width: 70px; height: 18px; background: #16110f; border-radius: 0 0 14px 14px; z-index: 5;
+}
+.phone-screen {
+  width: 100%; height: 100%; background: var(--cream); border-radius: 28px; overflow-y: auto; position: relative;
+}
+.inv-hero {
+  padding: 46px 24px 30px; text-align: center;
+  background: linear-gradient(rgba(20,14,10,0.45), rgba(20,14,10,0.6)), linear-gradient(135deg, #b98a52, #4a1f24);
+  color: var(--white);
+}
+.inv-hero .eyebrow { color: rgba(255,255,255,0.75); }
+.inv-hero h3 { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.7rem; margin: 8px 0 4px; }
+.inv-hero span { font-size: 0.7rem; letter-spacing: 0.24em; text-transform: uppercase; opacity: 0.85; }
+.inv-for { text-align: center; padding: 18px 20px 6px; font-size: 0.92rem; font-style: italic; color: var(--wine); }
+.inv-details { padding: 14px 24px; display: flex; flex-direction: column; gap: 10px; }
+.inv-detail-row { display: flex; gap: 10px; align-items: flex-start; font-size: 0.85rem; }
+.inv-detail-row .ico { font-size: 1rem; }
+.inv-detail-row b { display: block; color: var(--wine); font-size: 0.88rem; }
+.inv-rsvp { padding: 18px 24px; text-align: center; }
+.inv-rsvp h4 { font-size: 1rem; color: var(--wine); margin-bottom: 12px; }
+.rsvp-btns { display: flex; gap: 10px; justify-content: center; }
+.rsvp-btn { padding: 10px 16px; border-radius: 999px; border: 1.3px solid var(--gold); background: var(--white); font-size: 0.82rem; color: var(--wine); }
+.rsvp-btn.chosen-yes { background: var(--green); border-color: var(--green); color: var(--white); }
+.rsvp-btn.chosen-no { background: var(--ink-soft); border-color: var(--ink-soft); color: var(--white); }
+.rsvp-msg { margin-top: 10px; font-size: 0.8rem; color: var(--green); }
+.inv-pass {
+  margin: 16px 20px 30px; background: var(--wine); border-radius: 16px; padding: 20px;
+  text-align: center; color: var(--cream);
+}
+.inv-pass .pass-label { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.8; margin-bottom: 10px; }
+.inv-pass-qr { background: var(--white); border-radius: 10px; padding: 10px; display: inline-block; }
+.inv-pass-qr canvas, .inv-pass-qr img { display: block; }
+.inv-pass .pass-name { font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-top: 12px; }
+.inv-pass .pass-count { font-size: 0.78rem; color: var(--gold); margin-top: 3px; }
+
+.guest-picker { background: var(--white); border: 1px solid var(--cream-dark); border-radius: 16px; padding: 22px; margin-bottom: 20px; }
+.guest-picker label { display: block; font-size: 0.82rem; color: var(--ink-soft); margin-bottom: 8px; }
+.guest-picker select { width: 100%; padding: 11px 13px; border-radius: 9px; border: 1px solid var(--cream-dark); background: var(--cream); font-size: 1rem; }
+.explain-box { background: var(--white); border: 1px solid var(--cream-dark); border-radius: 16px; padding: 22px; font-size: 0.9rem; }
+.explain-box h4 { color: var(--wine); font-size: 1rem; margin-bottom: 8px; }
+.explain-box ul { margin: 10px 0 0; padding-left: 20px; }
+.explain-box li { margin-bottom: 6px; font-size: 0.88rem; color: var(--ink-soft); }
+
+/* ---- Mesas ---- */
+.tables-layout { display: grid; grid-template-columns: 1fr 280px; gap: 30px; align-items: start; }
+@media (max-width: 850px) { .tables-layout { grid-template-columns: 1fr; } }
+.tables-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 20px; }
+.table-card {
+  background: var(--white); border: 1px solid var(--cream-dark); border-radius: 16px; padding: 20px;
+  box-shadow: 0 6px 18px rgba(46,30,22,0.05);
+}
+.table-card.full { border-color: var(--gold); background: linear-gradient(180deg, rgba(182,146,79,0.06), transparent); }
+.table-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.table-head h4 { font-size: 1.1rem; color: var(--wine); }
+.table-seats { font-size: 0.76rem; color: var(--ink-soft); background: var(--cream); padding: 3px 10px; border-radius: 999px; }
+.table-seats.full-tag { background: rgba(182,146,79,0.16); color: var(--gold-dark); }
+.table-guest-chip {
+  display: flex; justify-content: space-between; align-items: center; background: var(--cream);
+  padding: 7px 10px; border-radius: 8px; font-size: 0.82rem; margin-bottom: 6px;
+}
+.table-guest-chip button { background: none; border: none; color: var(--ink-soft); font-size: 0.9rem; padding: 0 4px; }
+.table-empty-note { font-size: 0.78rem; color: var(--ink-soft); font-style: italic; }
+.table-assign-select { width: 100%; margin-top: 10px; padding: 8px; border-radius: 8px; border: 1px solid var(--cream-dark); background: var(--cream); font-size: 0.82rem; }
+
+.unassigned-panel { background: var(--white); border: 1px solid var(--cream-dark); border-radius: 16px; padding: 20px; position: sticky; top: 20px; }
+.unassigned-panel h4 { color: var(--wine); font-size: 1rem; margin-bottom: 4px; }
+.unassigned-panel > p { font-size: 0.8rem; margin-bottom: 14px; }
+.unassigned-chip {
+  display: flex; justify-content: space-between; align-items: center; padding: 9px 12px;
+  background: var(--cream); border-radius: 9px; margin-bottom: 8px; font-size: 0.85rem;
+}
+.unassigned-chip span.p { font-size: 0.72rem; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+
+<div class="demo-banner">🎓 Esta es una <strong>demo del panel</strong> — así se vería el sistema por dentro, no la landing pública.</div>
+
+<div class="tabs-wrap">
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="panel"><span class="num">1</span> Panel del festejado</button>
+    <button class="tab-btn" data-tab="invitado"><span class="num">2</span> Lo que ve el invitado</button>
+    <button class="tab-btn" data-tab="mesas"><span class="num">3</span> Mesas y asientos</button>
+  </div>
+</div>
+
+<!-- ======= VIEW 1: PANEL DEL FESTEJADO ======= -->
+<div class="view active" id="view-panel">
+  <div class="view-head">
+    <span class="eyebrow">Panel del festejado — Lupita &amp; Diego · 15 nov 2026</span>
+    <h2>Tus invitados</h2>
+    <p>Agrega a cada invitado con su número de pases. El sistema genera su invitación personalizada, su código QR y el link único que le compartes por WhatsApp.</p>
+  </div>
+
+  <div class="stats-row" id="stats-row"></div>
+
+  <div class="panel-grid">
+    <div class="add-guest-card">
+      <h3>Agregar invitado</h3>
+      <p>Cada invitado recibe su propio link y QR — no se repiten entre ellos.</p>
+      <div class="field">
+        <label for="g-name">Nombre del invitado</label>
+        <input id="g-name" type="text" placeholder="Ej. Familia Ramírez" />
+      </div>
+      <div class="field">
+        <label for="g-passes">Número de pases</label>
+        <select id="g-passes">
+          <option>1</option><option>2</option><option selected>3</option><option>4</option>
+          <option>5</option><option>6</option><option>7</option><option>8</option>
+        </select>
+      </div>
+      <button class="btn btn-wine" onclick="addGuest()">✨ Generar invitación y QR</button>
+    </div>
+
+    <div class="guest-list" id="guest-list"></div>
+  </div>
+</div>
+
+<!-- ======= VIEW 2: LO QUE VE EL INVITADO ======= -->
+<div class="view" id="view-invitado">
+  <div class="view-head">
+    <span class="eyebrow">Vista del invitado</span>
+    <h2>Así se abre la invitación cuando le llega el link</h2>
+    <p>Esto es exactamente lo que ve cada invitado al abrir su link en el celular — con su nombre y su número de pases ya personalizados.</p>
+  </div>
+
+  <div class="guest-view-layout">
+    <div>
+      <div class="guest-picker">
+        <label for="picker">Viendo la invitación de:</label>
+        <select id="picker" onchange="renderPhone()"></select>
+      </div>
+      <div class="explain-box">
+        <h4>Lo que puede hacer tu invitado aquí</h4>
+        <ul>
+          <li>Ver el nombre del evento y los detalles (fecha, hora, lugar)</li>
+          <li>Confirmar su asistencia con un botón — tú lo ves reflejado al instante en tu panel</li>
+          <li>Guardar su pase con QR, válido para el número de personas que le asignaste</li>
+        </ul>
+      </div>
+    </div>
+    <div class="phone-stage">
+      <div class="phone">
+        <div class="phone-screen" id="phone-screen"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======= VIEW 3: MESAS Y ASIENTOS ======= -->
+<div class="view" id="view-mesas">
+  <div class="view-head">
+    <span class="eyebrow">Gestor de mesas y asientos</span>
+    <h2>Acomoda a tus invitados por mesa</h2>
+    <p>Arrastra a cada invitado confirmado a su mesa. El sistema controla el cupo por mesa automáticamente.</p>
+  </div>
+
+  <div class="tables-layout">
+    <div class="tables-grid" id="tables-grid"></div>
+    <div class="unassigned-panel">
+      <h4>Sin mesa asignada</h4>
+      <p>Selecciona una mesa desde cada tarjeta para acomodarlos.</p>
+      <div id="unassigned-list"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------------- ESTADO ---------------- */
+let guestIdSeq = 1;
+const EVENT_SLUG = 'lupydiego';
+const EVENT_DOMAIN = 'https://invitaciones-digitales-mx.com';
+
+let guests = [
+  { id: guestIdSeq++, name: 'Familia Ramírez López', passes: 4, confirmed: true,  table: 1 },
+  { id: guestIdSeq++, name: 'Karla Torres',           passes: 2, confirmed: true,  table: 1 },
+  { id: guestIdSeq++, name: 'Mario y Fernanda Ortiz',  passes: 2, confirmed: null,  table: null },
+  { id: guestIdSeq++, name: 'Tía Rosa',                passes: 1, confirmed: false, table: null },
+];
+
+const TABLE_CAPACITY = 8;
+let tables = [1,2,3,4,5,6].map(n => ({ id: n, name: 'Mesa ' + n }));
+
+function slugify(name) {
+  return name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+}
+function guestLink(g) {
+  return `${EVENT_DOMAIN}/i/${EVENT_SLUG}/${slugify(g.name)}-${g.id}`;
+}
+
+/* ---------------- TABS ---------------- */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('view-' + btn.dataset.tab).classList.add('active');
+    if (btn.dataset.tab === 'invitado') renderPhone();
+    if (btn.dataset.tab === 'mesas') renderTables();
+  });
+});
+
+/* ---------------- PANEL DEL FESTEJADO ---------------- */
+function renderStats() {
+  const total = guests.length;
+  const confirmed = guests.filter(g => g.confirmed === true).length;
+  const pending = guests.filter(g => g.confirmed !== true).length;
+  const totalPasses = guests.reduce((s,g) => s + Number(g.passes), 0);
+  document.getElementById('stats-row').innerHTML = `
+    <div class="stat-card"><strong>${total}</strong><span>Invitados agregados</span></div>
+    <div class="stat-card"><strong>${confirmed}</strong><span>Confirmados</span></div>
+    <div class="stat-card"><strong>${pending}</strong><span>Pendientes</span></div>
+    <div class="stat-card"><strong>${totalPasses}</strong><span>Pases totales</span></div>
+  `;
+}
+
+function renderGuestList() {
+  const list = document.getElementById('guest-list');
+  list.innerHTML = '';
+  guests.forEach(g => {
+    const card = document.createElement('div');
+    card.className = 'guest-card';
+    const badgeClass = g.confirmed === true ? 'badge-confirmed' : 'badge-pending';
+    const badgeText = g.confirmed === true ? 'Confirmado' : (g.confirmed === false ? 'No asistirá' : 'Pendiente');
+    card.innerHTML = `
+      <div class="guest-qr-mini" id="qr-${g.id}"></div>
+      <div class="guest-info">
+        <h4>${g.name}</h4>
+        <div class="guest-meta">
+          <span>${g.passes} pase${g.passes>1?'s':''}</span>
+          <span class="badge ${badgeClass}">${badgeText}</span>
+        </div>
+        <div class="link-row">
+          <input type="text" readonly value="${guestLink(g)}" id="link-${g.id}" />
+          <button class="btn btn-outline btn-sm" onclick="copyLink(${g.id})">Copiar</button>
+          <span class="copied-tag" id="copied-${g.id}">¡Copiado!</span>
+        </div>
+      </div>
+      <div class="guest-actions">
+        <button class="btn btn-outline btn-sm" onclick="viewAsGuest(${g.id})">Ver invitación →</button>
+        <a class="btn btn-wine btn-sm" target="_blank" href="https://wa.me/?text=${encodeURIComponent('¡Hola ' + g.name + '! Aquí está tu invitación a nuestra boda 💍 ' + guestLink(g))}">Enviar WhatsApp</a>
+      </div>
+    `;
+    list.appendChild(card);
+    new QRCode(document.getElementById(`qr-${g.id}`), { text: guestLink(g), width: 60, height: 60, colorDark: '#4a1f24', colorLight: '#fffdf9' });
+  });
+}
+
+function addGuest() {
+  const nameInput = document.getElementById('g-name');
+  const passesInput = document.getElementById('g-passes');
+  const name = nameInput.value.trim();
+  if (!name) { nameInput.focus(); return; }
+  guests.push({ id: guestIdSeq++, name, passes: Number(passesInput.value), confirmed: null, table: null });
+  nameInput.value = '';
+  refreshAll();
+}
+
+function copyLink(id) {
+  const input = document.getElementById(`link-${id}`);
+  input.select();
+  navigator.clipboard?.writeText(input.value);
+  const tag = document.getElementById(`copied-${id}`);
+  tag.classList.add('show');
+  setTimeout(() => tag.classList.remove('show'), 1400);
+}
+
+function viewAsGuest(id) {
+  document.querySelector('.tab-btn[data-tab="invitado"]').click();
+  document.getElementById('picker').value = id;
+  renderPhone();
+}
+
+/* ---------------- VISTA DEL INVITADO ---------------- */
+function renderPicker() {
+  const picker = document.getElementById('picker');
+  const current = picker.value;
+  picker.innerHTML = guests.map(g => `<option value="${g.id}">${g.name} — ${g.passes} pase${g.passes>1?'s':''}</option>`).join('');
+  if (current && guests.some(g => g.id == current)) picker.value = current;
+}
+
+function renderPhone() {
+  const id = Number(document.getElementById('picker').value) || guests[0]?.id;
+  const g = guests.find(x => x.id === id);
+  const screen = document.getElementById('phone-screen');
+  if (!g) { screen.innerHTML = ''; return; }
+
+  const rsvpState = g.confirmed;
+  screen.innerHTML = `
+    <div class="inv-hero">
+      <span class="eyebrow" style="color:rgba(255,255,255,.75)">Nos casamos</span>
+      <h3>Lupita &amp; Diego</h3>
+      <span>15 de noviembre, 2026</span>
+    </div>
+    <div class="inv-for">Con mucho cariño para ${g.name}</div>
+    <div class="inv-details">
+      <div class="inv-detail-row"><span class="ico">📍</span><div><b>Jardín Villa Toscana</b>Orizaba, Veracruz</div></div>
+      <div class="inv-detail-row"><span class="ico">🕕</span><div><b>6:00 pm</b>Ceremonia y recepción</div></div>
+      <div class="inv-detail-row"><span class="ico">👗</span><div><b>Formal</b>Colores tierra y dorado</div></div>
+    </div>
+    <div class="inv-rsvp">
+      <h4>¿Nos acompañas?</h4>
+      <div class="rsvp-btns">
+        <button class="rsvp-btn ${rsvpState===true?'chosen-yes':''}" onclick="setRSVP(${g.id}, true)">Sí, ahí estaré</button>
+        <button class="rsvp-btn ${rsvpState===false?'chosen-no':''}" onclick="setRSVP(${g.id}, false)">No podré ir</button>
+      </div>
+      ${rsvpState !== null ? `<div class="rsvp-msg">${rsvpState ? '¡Gracias por confirmar! Te esperamos 💛' : 'Gracias por avisarnos, te vamos a extrañar.'}</div>` : ''}
+    </div>
+    <div class="inv-pass">
+      <div class="pass-label">Tu pase de entrada</div>
+      <div class="inv-pass-qr" id="pass-qr"></div>
+      <div class="pass-name">${g.name}</div>
+      <div class="pass-count">Válido para ${g.passes} persona${g.passes>1?'s':''}</div>
+    </div>
+  `;
+  new QRCode(document.getElementById('pass-qr'), { text: guestLink(g), width: 120, height: 120, colorDark: '#4a1f24', colorLight: '#fffdf9' });
+}
+
+function setRSVP(id, value) {
+  const g = guests.find(x => x.id === id);
+  g.confirmed = value;
+  renderPhone();
+  renderStats();
+}
+
+/* ---------------- MESAS Y ASIENTOS ---------------- */
+function renderTables() {
+  const grid = document.getElementById('tables-grid');
+  grid.innerHTML = '';
+  tables.forEach(t => {
+    const assigned = guests.filter(g => g.table === t.id);
+    const seatsUsed = assigned.reduce((s,g) => s + Number(g.passes), 0);
+    const isFull = seatsUsed >= TABLE_CAPACITY;
+    const card = document.createElement('div');
+    card.className = 'table-card' + (isFull ? ' full' : '');
+    card.innerHTML = `
+      <div class="table-head">
+        <h4>${t.name}</h4>
+        <span class="table-seats ${isFull?'full-tag':''}">${seatsUsed}/${TABLE_CAPACITY} lugares</span>
+      </div>
+      ${assigned.length ? assigned.map(g => `
+        <div class="table-guest-chip">
+          <span>${g.name} (${g.passes})</span>
+          <button title="Quitar de la mesa" onclick="unassign(${g.id})">✕</button>
+        </div>`).join('') : '<div class="table-empty-note">Sin invitados todavía</div>'}
+      <select class="table-assign-select" onchange="assignToTable(this, ${t.id})">
+        <option value="">+ Agregar invitado…</option>
+        ${guests.filter(g => g.table === null).map(g => `<option value="${g.id}">${g.name} (${g.passes} pases)</option>`).join('')}
+      </select>
+    `;
+    grid.appendChild(card);
+  });
+
+  const unassignedList = document.getElementById('unassigned-list');
+  const unassigned = guests.filter(g => g.table === null);
+  unassignedList.innerHTML = unassigned.length
+    ? unassigned.map(g => `<div class="unassigned-chip"><span>${g.name}</span><span class="p">${g.passes} pases</span></div>`).join('')
+    : '<p style="font-size:.82rem;">Todos tus invitados ya tienen mesa 🎉</p>';
+}
+
+function assignToTable(selectEl, tableId) {
+  const guestId = Number(selectEl.value);
+  if (!guestId) return;
+  const g = guests.find(x => x.id === guestId);
+  const assigned = guests.filter(x => x.table === tableId).reduce((s,x) => s + Number(x.passes), 0);
+  if (assigned + Number(g.passes) > TABLE_CAPACITY) {
+    alert(`${g.name} no cabe en esta mesa — solo quedan ${TABLE_CAPACITY - assigned} lugares.`);
+    selectEl.value = '';
+    return;
+  }
+  g.table = tableId;
+  renderTables();
+}
+
+function unassign(guestId) {
+  const g = guests.find(x => x.id === guestId);
+  g.table = null;
+  renderTables();
+}
+
+/* ---------------- INIT ---------------- */
+function refreshAll() {
+  renderStats();
+  renderGuestList();
+  renderPicker();
+}
+refreshAll();
+</script>
+
+</body>
+</html>
