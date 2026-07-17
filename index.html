@@ -328,21 +328,68 @@ img { max-width: 100%; }
 
 /* ---------- DEMO REAL ---------- */
 .demo-real {
-  background: var(--wine);
+  background: radial-gradient(120% 140% at 78% 20%, rgba(182,146,79,0.35), transparent 55%), var(--wine);
   color: var(--white);
-  border-radius: 24px;
-  padding: 56px;
+  border-radius: 28px;
+  padding: 64px 56px;
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
+  grid-template-columns: 1.1fr 0.9fr;
   gap: 40px;
   align-items: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 30px 70px rgba(74,31,36,0.35);
 }
-@media (max-width: 780px) { .demo-real { grid-template-columns: 1fr; padding: 40px 28px; text-align: center; } }
+@media (max-width: 780px) { .demo-real { grid-template-columns: 1fr; padding: 48px 26px; text-align: center; } }
+.demo-real-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(182,146,79,0.18); border: 1px solid rgba(182,146,79,0.5);
+  color: var(--gold); padding: 7px 16px; border-radius: 999px;
+  font-size: 0.8rem; letter-spacing: 0.02em; margin-bottom: 16px;
+  animation: badge-glow 2.2s ease-in-out infinite;
+}
+@keyframes badge-glow {
+  0%, 100% { box-shadow: 0 0 0 rgba(182,146,79,0); }
+  50% { box-shadow: 0 0 18px rgba(182,146,79,0.45); }
+}
 .demo-real .eyebrow { color: var(--gold); }
-.demo-real h2 { font-style: italic; font-size: 2rem; margin: 10px 0 16px; }
-.demo-real p { color: rgba(255,255,255,0.82); }
+.demo-real h2 { font-style: italic; font-size: 2.3rem; margin: 10px 0 16px; }
+.demo-real p { color: rgba(255,255,255,0.85); font-size: 1.05rem; }
 .demo-real .btn-outline { border-color: var(--gold); color: var(--gold); }
 .demo-real .btn-outline:hover { background: var(--gold); color: var(--wine); }
+.demo-real-cta {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-top: 26px; padding: 17px 32px; border-radius: 999px;
+  background: var(--gold); color: var(--wine) !important; font-size: 1.05rem;
+  text-decoration: none; box-shadow: 0 10px 30px rgba(182,146,79,0.4);
+  animation: cta-pulse 2.2s ease-in-out infinite;
+}
+@keyframes cta-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 10px 30px rgba(182,146,79,0.4); }
+  50% { transform: scale(1.035); box-shadow: 0 14px 38px rgba(182,146,79,0.6); }
+}
+.demo-real-phone-wrap { position: relative; display: flex; justify-content: center; }
+.demo-real-glow {
+  position: absolute; width: 320px; height: 320px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(182,146,79,0.5), transparent 70%);
+  filter: blur(10px); animation: glow-breathe 2.6s ease-in-out infinite;
+}
+@keyframes glow-breathe {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.12); }
+}
+.demo-real-poke {
+  position: absolute; top: -14px; right: 6px; z-index: 6;
+  background: var(--white); color: var(--wine); font-size: 0.76rem;
+  padding: 8px 14px; border-radius: 999px; box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  animation: poke-bounce 1.8s ease-in-out infinite;
+  white-space: nowrap;
+}
+@keyframes poke-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@media (max-width: 780px) { .demo-real-poke { right: 50%; transform: translateX(50%); } }
 
 /* ---------- CONTACTO ---------- */
 .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; }
@@ -748,19 +795,23 @@ footer { padding: 50px 0 40px; border-top: 1px solid var(--cream-dark); }
   <div class="wrap">
     <div class="demo-real">
       <div>
+        <span class="demo-real-badge">✨ La joya de tu invitación digital</span>
         <p class="eyebrow">Ejemplo real</p>
-        <h2>Así se ve una invitación terminada</h2>
-        <p>Esta es una invitación real que hicimos, con sello de apertura, confirmación de asistencia y pase con código QR. Ábrela desde tu celular para ver la experiencia completa.</p>
-        <a href="https://invitacion-boda-zzt9.onrender.com/i/GJcGSjyn" target="_blank" rel="noopener" class="btn btn-outline" style="margin-top:20px;">Ver invitación de ejemplo →</a>
-        <a href="panel-festejado-demo.html" target="_blank" rel="noopener" class="btn btn-outline" style="margin-top:20px;margin-left:12px;">Ver cómo funciona el panel →</a>
+        <h2>Así se siente recibir una invitación tuya</h2>
+        <p>Sello de apertura, confirmación de asistencia y pase con código QR — esto es exactamente lo que le va a llegar a cada uno de tus invitados. Ábrela desde tu celular y compruébalo tú mismo.</p>
+        <a href="https://invitacion-boda-zzt9.onrender.com/i/GJcGSjyn" target="_blank" rel="noopener" class="demo-real-cta">👉 Abrir la invitación de ejemplo</a>
       </div>
-      <div class="phone-stage">
-        <div class="phone" style="width:210px;height:420px;">
-          <div class="phone-screen">
-            <div class="demo-slide is-active">
-              <div class="demo-hero" style="background:linear-gradient(rgba(20,14,10,0.42), rgba(20,14,10,0.6)), linear-gradient(135deg, #b98a52, #4a1f24);">
-                <h3 style="font-size:1.4rem;">Lupita &amp; Diego</h3>
-                <span>No faltes a nuestra boda</span>
+      <div class="demo-real-phone-wrap">
+        <div class="demo-real-glow"></div>
+        <span class="demo-real-poke">Tócala, es real 👆</span>
+        <div class="phone-stage">
+          <div class="phone" style="width:250px;height:500px;">
+            <div class="phone-screen">
+              <div class="demo-slide is-active">
+                <div class="demo-hero" style="background:linear-gradient(rgba(20,14,10,0.42), rgba(20,14,10,0.6)), linear-gradient(135deg, #b98a52, #4a1f24);">
+                  <h3 style="font-size:1.6rem;">Lupita &amp; Diego</h3>
+                  <span>No faltes a nuestra boda</span>
+                </div>
               </div>
             </div>
           </div>
