@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lupita &amp; Diego — Invitación de boda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root {
+  --cream: #f6f1e7;
+  --cream-dark: #e9dfc9;
+  --ink: #2e2a26;
+  --ink-soft: #6b6258;
+  --gold: #b6924f;
+  --gold-dark: #8f7038;
+  --wine: #4a1f24;
+  --wine-soft: #6d2f37;
+  --green: #2f6b4f;
+  --white: #fffdf9;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: 'EB Garamond', Georgia, serif;
+  background: var(--wine);
+  color: var(--ink);
+  min-height: 100vh;
+  display: flex; justify-content: center;
+}
+h1,h2,h3 { font-family: 'Playfair Display', 'Cormorant Garamond', serif; margin: 0; font-weight: 600; }
+p { line-height: 1.6; margin: 0; }
+
+.card { width: 100%; max-width: 480px; background: var(--cream); min-height: 100vh; position: relative; }
+
+/* --- Sello de apertura --- */
+.seal-overlay {
+  position: fixed; inset: 0; background: var(--wine);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 50; transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+.seal-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.seal {
+  width: 110px; height: 110px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #8f2b34, var(--wine) 70%);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.45), inset 0 -4px 10px rgba(0,0,0,0.35);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.4rem; color: var(--cream); cursor: pointer;
+  animation: seal-breathe 2.2s ease-in-out infinite;
+}
+@keyframes seal-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+.seal-hint { margin-top: 18px; font-size: 0.74rem; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(246,241,231,0.75); }
+
+/* --- Hero --- */
+.inv-hero {
+  padding: 70px 30px 44px; text-align: center; color: var(--white);
+  background: linear-gradient(rgba(20,14,10,0.42), rgba(20,14,10,0.62)),
+              url('https://images.pexels.com/photos/29237393/pexels-photo-29237393.jpeg?auto=compress&cs=tinysrgb&w=900') center/cover;
+}
+.inv-hero .eyebrow { font-style: italic; letter-spacing: 0.24em; text-transform: uppercase; font-size: 0.76rem; color: rgba(255,255,255,0.75); }
+.inv-hero h1 { font-style: italic; font-size: 2.5rem; margin: 12px 0 6px; }
+.inv-hero span.date { font-size: 0.78rem; letter-spacing: 0.28em; text-transform: uppercase; opacity: 0.9; }
+
+.inv-for { text-align: center; padding: 26px 24px 6px; font-size: 1.02rem; font-style: italic; color: var(--wine); }
+.inv-for b { font-style: normal; }
+
+.inv-details { padding: 20px 30px; display: flex; flex-direction: column; gap: 16px; }
+.inv-detail-row { display: flex; gap: 14px; align-items: flex-start; font-size: 0.95rem; }
+.inv-detail-row .ico { font-size: 1.3rem; }
+.inv-detail-row b { display: block; color: var(--wine); font-size: 1rem; margin-bottom: 2px; }
+.inv-detail-row span { color: var(--ink-soft); }
+
+.inv-rsvp { padding: 30px 30px 10px; text-align: center; }
+.inv-rsvp h3 { font-size: 1.2rem; color: var(--wine); margin-bottom: 16px; }
+.rsvp-btns { display: flex; gap: 12px; justify-content: center; }
+.rsvp-btn {
+  padding: 13px 22px; border-radius: 999px; border: 1.4px solid var(--gold); background: var(--white);
+  font-size: 0.92rem; color: var(--wine); cursor: pointer; font-family: inherit;
+}
+.rsvp-btn.chosen-yes { background: var(--green); border-color: var(--green); color: var(--white); }
+.rsvp-btn.chosen-no { background: var(--ink-soft); border-color: var(--ink-soft); color: var(--white); }
+.rsvp-msg { margin-top: 14px; font-size: 0.88rem; color: var(--green); }
+
+.inv-pass {
+  margin: 26px 24px 40px; background: var(--wine); border-radius: 18px; padding: 28px;
+  text-align: center; color: var(--cream);
+}
+.inv-pass .pass-label { font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.8; margin-bottom: 14px; }
+.inv-pass-qr { background: var(--white); border-radius: 12px; padding: 12px; display: inline-block; }
+.inv-pass .pass-name { font-family: 'Playfair Display', serif; font-size: 1.25rem; margin-top: 14px; }
+.inv-pass .pass-count { font-size: 0.82rem; color: var(--gold); margin-top: 4px; }
+
+.inv-footer { text-align: center; padding: 0 24px 40px; font-size: 0.8rem; color: var(--ink-soft); }
+.inv-footer a { color: var(--wine); }
+</style>
+</head>
+<body>
+
+<div class="seal-overlay" id="seal-overlay">
+  <div class="seal" id="seal" onclick="openInvitation()">💌</div>
+  <div class="seal-hint">Toca el sello para abrir tu invitación</div>
+</div>
+
+<div class="card">
+  <div class="inv-hero">
+    <span class="eyebrow">Nos casamos</span>
+    <h1>Lupita &amp; Diego</h1>
+    <span class="date">15 de noviembre, 2026</span>
+  </div>
+
+  <div class="inv-for">Con mucho cariño para <b>ti</b></div>
+
+  <div class="inv-details">
+    <div class="inv-detail-row"><span class="ico">📍</span><div><b>Jardín Villa Toscana</b><span>Orizaba, Veracruz</span></div></div>
+    <div class="inv-detail-row"><span class="ico">🕕</span><div><b>6:00 pm</b><span>Ceremonia y recepción</span></div></div>
+    <div class="inv-detail-row"><span class="ico">👗</span><div><b>Formal</b><span>Colores tierra y dorado</span></div></div>
+  </div>
+
+  <div class="inv-rsvp">
+    <h3>¿Nos acompañas?</h3>
+    <div class="rsvp-btns">
+      <button class="rsvp-btn" id="rsvp-yes" onclick="setRSVP(true)">Sí, ahí estaré</button>
+      <button class="rsvp-btn" id="rsvp-no" onclick="setRSVP(false)">No podré ir</button>
+    </div>
+    <div class="rsvp-msg" id="rsvp-msg"></div>
+  </div>
+
+  <div class="inv-pass">
+    <div class="pass-label">Tu pase de entrada</div>
+    <div class="inv-pass-qr" id="pass-qr"></div>
+    <div class="pass-name">Invitado de ejemplo</div>
+    <div class="pass-count">Válido para 2 personas</div>
+  </div>
+
+  <div class="inv-footer">
+    Invitación hecha con <a href="index.html">Invitaciones Digitales MX</a>
+  </div>
+</div>
+
+<script>
+function openInvitation() {
+  document.getElementById('seal-overlay').classList.add('hidden');
+}
+function setRSVP(yes) {
+  document.getElementById('rsvp-yes').classList.toggle('chosen-yes', yes === true);
+  document.getElementById('rsvp-no').classList.toggle('chosen-no', yes === false);
+  document.getElementById('rsvp-msg').textContent = yes
+    ? '¡Gracias por confirmar! Te esperamos 💛'
+    : 'Gracias por avisarnos, te vamos a extrañar.';
+}
+new QRCode(document.getElementById('pass-qr'), {
+  text: 'https://invitaciones-digitales-mx.com/i/lupydiego/ejemplo',
+  width: 130, height: 130, colorDark: '#4a1f24', colorLight: '#fffdf9'
+});
+</script>
+
+</body>
+</html>
