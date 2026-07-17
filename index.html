@@ -809,7 +809,11 @@ footer { padding: 50px 0 40px; border-top: 1px solid var(--cream-dark); }
       <p>Respondemos por WhatsApp normalmente el mismo día.</p>
     </div>
     <div class="contact-grid">
-      <form class="contact-form" action="mailto:mrktlegend1@gmail.com" method="post" enctype="text/plain">
+      <form class="contact-form" action="https://formsubmit.co/mrktlegend1@gmail.com" method="POST">
+        <input type="hidden" name="_subject" value="Nueva cotización — Invitaciones Digitales MX" />
+        <input type="hidden" name="_template" value="table" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
         <div>
           <label for="nombre">Tu nombre</label>
           <input id="nombre" name="nombre" type="text" required />
@@ -834,6 +838,7 @@ footer { padding: 50px 0 40px; border-top: 1px solid var(--cream-dark); }
         </div>
         <button type="submit" class="btn btn-wine">Enviar mensaje</button>
       </form>
+      <p style="font-size:0.78rem;color:var(--ink-soft);margin-top:-6px;">Al enviar, te llegará el mensaje directo a tu correo. La primera vez, FormSubmit te va a pedir confirmar tu correo con un clic.</p>
 
       <div class="contact-wa">
         <h3>¿Prefieres ir directo a WhatsApp?</h3>
