@@ -136,6 +136,7 @@ p { line-height: 1.65; margin: 0; }
 .ornament .line { height: 1.5px; width: 40px; background: linear-gradient(90deg, transparent, var(--gold-light)); }
 .ornament .line.r { background: linear-gradient(90deg, var(--gold-light), transparent); }
 .ornament svg { width: 18px; height: 18px; filter: drop-shadow(0 0 3px rgba(242,215,140,0.4)); }
+.rose-accent { font-size: 0.9rem; filter: drop-shadow(0 0 3px rgba(196,30,79,0.35)); }
 
 .inv-hero {
   padding: 80px 30px 50px; text-align: center; color: var(--white); position: relative;
@@ -333,7 +334,10 @@ p { line-height: 1.65; margin: 0; }
 </head>
 <body>
 
-<audio id="bgm" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"></audio>
+<audio id="bgm" loop>
+  <source src="https://archive.org/download/Incompetech/mp3-royaltyfree/In%20Your%20Arms.mp3" type="audio/mpeg">
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+</audio>
 
 <div id="scroll-progress"></div>
 
@@ -343,6 +347,7 @@ p { line-height: 1.65; margin: 0; }
 </div>
 
 <div class="seal-overlay" id="seal-overlay">
+  <div style="font-size:1.6rem; margin-bottom:6px;">🌹</div>
   <div class="script">Mila &amp; Ethan</div>
   <div class="seal" id="seal" onclick="openInvitation()">
     <div class="crack-flash" id="crack-flash"></div>
@@ -361,9 +366,11 @@ p { line-height: 1.65; margin: 0; }
     <span class="eyebrow" data-i18n="hero_eyebrow">Nos casamos</span>
     <h1 style="font-size:3rem;">Mila &amp; Ethan</h1>
     <div class="ornament">
+      <span class="rose-accent">🌹</span>
       <span class="line"></span>
       <svg viewBox="0 0 40 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="15" cy="12" r="8" stroke="#c9973f" stroke-width="2"/><circle cx="25" cy="12" r="8" stroke="#c9973f" stroke-width="2"/></svg>
       <span class="line r"></span>
+      <span class="rose-accent">🌹</span>
     </div>
     <div class="datebox" data-i18n="hero_date">14 · Noviembre · 2026</div>
     <div class="countdown" id="countdown">
@@ -826,7 +833,7 @@ if ('IntersectionObserver' in window) {
 (function initPetals() {
   const field = document.getElementById('petal-field');
   if (!field) return;
-  const emojis = ['🌸', '🥀', '🍃'];
+  const emojis = ['🌸', '🌹', '🥀', '🍃'];
   const count = 14;
   for (let i = 0; i < count; i++) {
     const p = document.createElement('span');
